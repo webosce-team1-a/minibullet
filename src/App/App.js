@@ -9,6 +9,7 @@ import React from 'react';
 import ScrollerComponent from '@enact/moonstone/Scroller';
 import ViewManager from '@enact/ui/ViewManager';
 import axios from 'axios';
+import LS2Request from '@enact/webos/LS2Request';
 
 //import MainPanel from '../views/MainPanel';
 import Me from '../views/Me.js'
@@ -114,16 +115,37 @@ const getAllPushes =() =>{
 	let extra = { 'active' : 'true'};
 	var out = document.getElementById("devList");
 	
-	axios.get(url, extra ).then(response => {
-		console.log("PUSH");
-		var pushList = response.data.pushes;
+	axios.get(url, extra )
+		.then(response => {
+			console.log("PUSH");
+			var pushList = response.data.pushes;
 			for(var i = 0; i < pushList.length; i++){
-					out.innerHTML += pushList[i].body + "<br>";
+				out.innerHTML += pushList[i].body + "<br>";
 			}	
 		})
-		.catch(error =>{
+		.catch(error => {
 			console.error(error);
-	  	});
+		});
+}
+
+const notifyLS2 = (msg) => {
+	new LS2Request().send({
+		service: 'luna://com.webos.notification/',
+		method: 'createToast',
+		parameters: {
+			"sourceId": "com.domain.app",
+			"message": msg,
+			"noaction": true,
+			"persistent": false
+		},
+		subscribe: true,
+		onSuccess: function (args) {
+			console.log(args);
+		},
+		onFailure: function (args) {
+			console.log(args);
+		}
+	});
 }
 
 let flag = true;
@@ -164,8 +186,8 @@ const AppBase = kind({
 						view['pushFriends'] = pushFriends;
 						view['getAllPushes'] = getAllPushes;
 						view['getDevices'] = getDevices;
+						view['notify'] = notifyLS2;
 						view['getChat'] = getChatList;
-
 						view['token'] = tok;
 						view['me'] = me;
 						
