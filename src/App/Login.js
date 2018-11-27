@@ -15,16 +15,16 @@ const inputColumn = {
 
 
 */}
-const Login = () => (
+const Login = (props) => (
 	<Layout orientation="vertical">
 		<Cell component={Scroller} focusableScrollbar>
 			<div >
 				<Divider>please login using using your token</Divider>
 				<Input placeholder="Enter token" iconAfter="lock" />
-				<Button>Login</Button>
+				<Button onClick={props.tokenEnter}>Login</Button>
 				<br/><br/><br/><br/>
 				<Divider>If you don't have token..</Divider>
-				<Button>Go to get Token</Button>
+				<Button onClick={props.testFunction}>Go to get Token</Button>
 			</div>
 
 			{/*
@@ -39,6 +39,7 @@ const Login = () => (
 			</div>
 			*/}
 		</Cell>
+		
 	</Layout>
 );
 

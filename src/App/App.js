@@ -6,6 +6,8 @@ import Layout, {Cell} from '@enact/ui/Layout';
 import MoonstoneDecorator from '@enact/moonstone/MoonstoneDecorator';
 import PropTypes from 'prop-types';
 import React from 'react';
+import axios from 'axios';
+
 import ScrollerComponent from '@enact/moonstone/Scroller';
 import ViewManager from '@enact/ui/ViewManager';
 
@@ -27,7 +29,25 @@ const views = [
 	{title:'setting', view:Setting},
 ]
 
+const testFunction = () => {
+	console.log("Test ");
+}
+
 let flag = false;
+const tokenURL ="https://api.pushbullet.com/v2/users/me";
+const baseURL = "https://api.pushbullet.com/v2/";
+const userURL = baseURL + "chats";
+const deviceURL = baseURL + "devices";
+const pushURL = baseURL + "pushes";
+
+
+const tokenEnter  = function() {
+    var tok = "o.jkutNveC2uQZtTfPNfG0GchnrM1xdVpx";
+	axios.post(tokenURL, { "Access-Token": tok }).then(res =>{
+		console.log(res.email);
+	})
+}
+
 
 const AppBase = kind({
 	name: 'App',
@@ -53,15 +73,20 @@ const AppBase = kind({
 
 		return (
 			<Layout {...rest}>
-				{flag ? (<Cell component={ScrollerComponent} size="20%">
+				<Cell component={ScrollerComponent} size="20%">
 					<Group childComponent={Item} itemProps={{className: css.navItem}} onSelect={handleChange} select={'radio'} selected={index}>
 						{views.map((view) => view.title)}
 					</Group>
-				</Cell> ) : null}
+				</Cell>
 				<Cell component={ViewManager} index={index}>
-					{views.map((view, i) => (
-						<View {...view} key={i} />
-					))}
+					{views.map((view, i) => {
+						view['testFunction'] = testFunction;
+						view['tokenEnter'] =tokenEnter;
+
+						return (
+							<View {...view} key={i} />
+						);
+					})}
 				</Cell>
 			</Layout>
 		);
