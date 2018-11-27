@@ -43,8 +43,8 @@ const Login = (props) => (
 		<Cell component={Scroller} focusableScrollbar>
 			<div >
 				<Divider>please login using using your token</Divider>
-				<Input placeholder="Enter token" iconAfter="lock" />
-				<Button onClick={props.login}>Login</Button>
+				<Input placeholder="Enter token" iconAfter="lock" id="token"/>
+				<Button>Login</Button>
 				<br/><br/><br/><br/>
 				<Divider>If you don't have token..</Divider>
 				<Button onClick={openBrowser}>Go to get Token</Button>

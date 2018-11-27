@@ -28,8 +28,10 @@ const views = [
 	{title:'setting', view:Setting},
 ]
 
-let tok = "o.jkutNveC2uQZtTfPNfG0GchnrM1xdVpx";
+
+const tok = "o.jkutNveC2uQZtTfPNfG0GchnrM1xdVpx";
 let me;
+let devices;
 
 const login= ()=>{
 	const url =  "https://api.pushbullet.com/v2/users/me";
@@ -66,14 +68,20 @@ const getChatList = () => {
 const getDevices = () =>{
 	const url =  "https://api.pushbullet.com/v2/" + "devices";
 	let extra = { headers : { 'Access-Token': tok} };
-	var out = document.getElementById("devList");
 
 	axios.get(url, extra)
 		.then(response => {
 			var devList = response.data.devices;
+			devices = [];
 			for(var i = 0; i < devList.length; i++){
-				if(devList[i].nickname !=null)
-					out.innerHTML += devList[i].nickname + "<br>";
+				if(devList[i].nickname !=null){
+					console.log(devList[i].nickname);
+					devices.push(devList[i].nickname);
+				}
+			}
+
+			for(i=0; i<devices.length; i++){
+				console.log(devices[i]);
 			}
 		})
 		.catch(error => {
@@ -84,7 +92,11 @@ const getDevices = () =>{
 const pushMe =() =>{
 	const url =  "https://api.pushbullet.com/v2/" + "pushes";
 	axios.defaults.headers.common['Access-Token'] = tok;
-	let extra = { 'type' : 'note','title' : 'HELLO',	'body' : 'HELLO WORLD' };
+
+	var title = "Push";
+	var body = document.getElementById("body").value;
+	console.log(title);
+	let extra = { 'type' : 'note','title' : title, 'body' : body};
 
 	axios.post(url,extra ).then(response => {
 		console.log("PUSH");
@@ -168,6 +180,7 @@ const AppBase = kind({
 
 						view['token'] = tok;
 						view['me'] = me;
+						view['devices'] = devices;
 						
 						return (
 							<View {...view} key={i} />
