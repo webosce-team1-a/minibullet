@@ -3,7 +3,9 @@ import Divider from '@enact/moonstone/Divider';
 import Layout, {Cell} from '@enact/ui/Layout';
 import React from 'react';
 import Scroller from '@enact/moonstone/Scroller';
-import Button from '@enact/moonstone/Button';
+import Button from '@enact/moonstone/Button/Button';
+import axios from 'axios';
+
 
 const FriendsView = (props) => (
     
@@ -14,10 +16,11 @@ const FriendsView = (props) => (
 				noneText="none"
 				title="Friends"
 			/>
-			<Button onClick={props.getChat}>Load Chats</Button>
-			<p id="chatList"></p>
+			<Button onClick={props.pushMe}>Load Chats</Button>
+			<p id="devList"></p>
 		</Cell>
 	</Layout>
 );
+
 
 export default FriendsView;

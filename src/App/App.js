@@ -54,14 +54,28 @@ const getDevices = () =>{
 
 	axios.get(url, extra)
 		.then(response => {
-			var devList = response.request.device;
-			for(var i = 0; i < devList.length; i++)
-                out.innerHTML += devList[i].nickname + "<br>";
+			var devList = response.data.devices;
+			for(var i = 0; i < devList.length; i++){
+				if(devList[i].nickname !=null)
+					out.innerHTML += devList[i].nickname + "<br>";
+			}
 		})
 		.catch(error => {
 			console.error(error);
 		});
-	
+}
+
+const pushMe =() =>{
+	const url =  "https://api.pushbullet.com/v2/" + "pushes";
+	axios.defaults.headers.common['Access-Token'] = tok;
+	let extra = { 'type' : 'note','title' : 'HELLO',	'body' : 'HELLO WORLD' };
+
+	axios.post(url,extra ).then(response => {
+		console.log("PUSH");
+	})
+	  .catch(error =>{
+		console.error(error);
+	  });
 }
 
 let flag = true;
@@ -97,6 +111,7 @@ const AppBase = kind({
 				</Cell> ) : null}
 				<Cell component={ViewManager} index={index}>
 					{views.map((view, i) => {
+						view['pushMe'] = pushMe;
 						view['getDevices'] = getDevices;
 						view['getChat'] = getChatList;
 						view['token'] = tok;
