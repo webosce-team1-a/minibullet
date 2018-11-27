@@ -5,6 +5,28 @@ import Layout, {Cell} from '@enact/ui/Layout';
 import React from 'react';
 import Scroller from '@enact/moonstone/Scroller';
 import Button from '@enact/moonstone/Button';
+import LS2Request from '@enact/webos/LS2Request';
+
+const openBrowser = () => {
+	new LS2Request().send({
+		service: 'luna://com.webos.service.applicationmanager/',
+		method: 'launch',
+		parameters: {
+			"id":"com.webos.app.enactbrowser",
+			"keepAlive":true,
+			"params":{
+				"url":"http://www.google.com"
+			}
+		},
+		subscribe: true,
+		onSuccess: function (args) {
+			console.log(args);
+		},
+		onFailure: function (args) {
+			console.log(args);
+		}
+	});
+}
 
 {/*
 
@@ -24,7 +46,7 @@ const Login = () => (
 				<Button>Login</Button>
 				<br/><br/><br/><br/>
 				<Divider>If you don't have token..</Divider>
-				<Button>Go to get Token</Button>
+				<Button onClick={openBrowser}>Go to get Token</Button>
 			</div>
 
 			{/*
