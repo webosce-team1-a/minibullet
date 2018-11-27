@@ -29,6 +29,22 @@ const views = [
 ]
 
 let tok = "o.jkutNveC2uQZtTfPNfG0GchnrM1xdVpx";
+let me;
+
+const login= ()=>{
+	const url =  "https://api.pushbullet.com/v2/users/me";
+	//tok = document.getElementById("token").value;
+	
+	let extra = { 'Access-Token' : tok };
+
+	axios.get(url, extra).then(response =>{
+		me = response.data.name;
+		console.log(me);
+	}).catch(error=>{
+		console.error(error);
+	});
+
+}
 
 const getChatList = () => {
 	const url = "https://api.pushbullet.com/v2/" + "chats";
@@ -90,11 +106,24 @@ const pushFriends =() =>{
 	  });
 }
 
-const getPushes =() =>{
+const getAllPushes =() =>{
 	const url =  "https://api.pushbullet.com/v2/" + "pushes";
-	axios.defaults.headers.common['Access-Token'] = tok;
-	let extra = { 'type' : 'note','title' : 'HELLO',	'body' : 'HELLO WORLD' };
 
+	//반드시반드시 바꿔요
+	axios.defaults.headers.common['Access-Token'] = tok;
+	let extra = { 'active' : 'true'};
+	var out = document.getElementById("devList");
+	
+	axios.get(url, extra ).then(response => {
+		console.log("PUSH");
+		var pushList = response.data.pushes;
+			for(var i = 0; i < pushList.length; i++){
+					out.innerHTML += pushList[i].body + "<br>";
+			}	
+		})
+		.catch(error =>{
+			console.error(error);
+	  	});
 }
 
 let flag = true;
@@ -130,11 +159,16 @@ const AppBase = kind({
 				</Cell> ) : null}
 				<Cell component={ViewManager} index={index}>
 					{views.map((view, i) => {
+						view['login'] = login;
 						view['pushMe'] = pushMe;
 						view['pushFriends'] = pushFriends;
+						view['getAllPushes'] = getAllPushes;
 						view['getDevices'] = getDevices;
 						view['getChat'] = getChatList;
+
 						view['token'] = tok;
+						view['me'] = me;
+						
 						return (
 							<View {...view} key={i} />
 						);
