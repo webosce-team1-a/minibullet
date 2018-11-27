@@ -6,6 +6,7 @@ import React from 'react';
 import Scroller from '@enact/moonstone/Scroller';
 import Button from '@enact/moonstone/Button';
 import LS2Request from '@enact/webos/LS2Request';
+import { propTypes } from '@enact/moonstone/Panels/Router';
 
 const openBrowser = () => {
 	new LS2Request().send({
@@ -37,13 +38,13 @@ const inputColumn = {
 
 
 */}
-const Login = () => (
+const Login = (props) => (
 	<Layout orientation="vertical">
 		<Cell component={Scroller} focusableScrollbar>
 			<div >
 				<Divider>please login using using your token</Divider>
 				<Input placeholder="Enter token" iconAfter="lock" />
-				<Button>Login</Button>
+				<Button onClick={props.login}>Login</Button>
 				<br/><br/><br/><br/>
 				<Divider>If you don't have token..</Divider>
 				<Button onClick={openBrowser}>Go to get Token</Button>
