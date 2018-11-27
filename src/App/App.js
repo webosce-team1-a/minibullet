@@ -10,6 +10,7 @@ import React from 'react';
 import ScrollerComponent from '@enact/moonstone/Scroller';
 import ViewManager from '@enact/ui/ViewManager';
 import axios from 'axios';
+import LS2Request from '@enact/webos/LS2Request';
 
 //import MainPanel from '../views/MainPanel';
 import Me from '../views/Me.js'
@@ -49,6 +50,26 @@ const getChatList = () => {
 		});
 }
 
+const notifyLS2 = (msg) => {
+	new LS2Request().send({
+		service: 'luna://com.webos.notification/',
+		method: 'createToast',
+		parameters: {
+			"sourceId": "com.domain.app",
+			"message": msg,
+			"noaction": true,
+			"persistent": false
+		},
+		subscribe: true,
+		onSuccess: function (args) {
+			console.log(args);
+		},
+		onFailure: function (args) {
+			console.log(args);
+		}
+	});
+}
+
 let flag = true;
 
 const AppBase = kind({
@@ -84,6 +105,7 @@ const AppBase = kind({
 
 				<Cell component={ViewManager} index={index}>
 					{views.map((view, i) => {
+						view['notify'] = notifyLS2;
 						view['getChat'] = getChatList;
 						view['token'] = tok;
 						return (
