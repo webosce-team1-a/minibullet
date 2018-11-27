@@ -26,6 +26,11 @@ const views = [
 	{title:'setting', view:Setting},
 ]
 
+const testFunction = (e) => {
+	console.log("Test ");
+	console.dir(e);
+}
+
 
 const AppBase = kind({
 	name: 'App',
@@ -57,9 +62,12 @@ const AppBase = kind({
 					</Group>
 				</Cell>
 				<Cell component={ViewManager} index={index}>
-					{views.map((view, i) => (
-						<View {...view} key={i} />
-					))}
+					{views.map((view, i) => {
+						view['testFunction'] = testFunction;
+						return (
+							<View {...view} key={i} />
+						);
+					})}
 				</Cell>
 			</Layout>
 		);
