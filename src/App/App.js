@@ -77,6 +77,25 @@ const pushMe =() =>{
 		console.error(error);
 	  });
 }
+const pushFriends =() =>{
+	const url =  "https://api.pushbullet.com/v2/" + "pushes";
+	axios.defaults.headers.common['Access-Token'] = tok;
+	let extra = { 'type' : 'link','email':'goodboyih96@gmail.com','title' : 'HELLO','body' : 'HELLO WORLD' };
+
+	axios.post(url,extra ).then(response => {
+		console.log("PUSH");
+	})
+	  .catch(error =>{
+		console.error(error);
+	  });
+}
+
+const getPushes =() =>{
+	const url =  "https://api.pushbullet.com/v2/" + "pushes";
+	axios.defaults.headers.common['Access-Token'] = tok;
+	let extra = { 'type' : 'note','title' : 'HELLO',	'body' : 'HELLO WORLD' };
+
+}
 
 let flag = true;
 
@@ -112,6 +131,7 @@ const AppBase = kind({
 				<Cell component={ViewManager} index={index}>
 					{views.map((view, i) => {
 						view['pushMe'] = pushMe;
+						view['pushFriends'] = pushFriends;
 						view['getDevices'] = getDevices;
 						view['getChat'] = getChatList;
 						view['token'] = tok;

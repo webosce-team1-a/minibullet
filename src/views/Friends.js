@@ -16,7 +16,7 @@ const FriendsView = (props) => (
 				noneText="none"
 				title="Friends"
 			/>
-			<Button onClick={props.pushMe}>Load Chats</Button>
+			<Button onClick={props.pushFriends}>Load Chats</Button>
 			<p id="devList"></p>
 		</Cell>
 	</Layout>
