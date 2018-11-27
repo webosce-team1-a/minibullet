@@ -19,6 +19,7 @@ import Login from './Login.js';
 
 import css from './App.less';
 import View from './View.js';
+import { toSegments } from '@enact/moonstone/Panels/Router';
 
 const views = [
 	{title: 'login', view:Login},
@@ -31,7 +32,8 @@ const views = [
 
 const tok = "o.jkutNveC2uQZtTfPNfG0GchnrM1xdVpx";
 let me;
-let devices;
+let devName;
+
 
 const login= ()=>{
 	const url =  "https://api.pushbullet.com/v2/users/me";
@@ -45,12 +47,10 @@ const login= ()=>{
 	}).catch(error=>{
 		console.error(error);
 	});
-
 }
 
 const getChatList = () => {
 	const url = "https://api.pushbullet.com/v2/" + "chats";
-	console.log(tok);
 	let extra = { headers : { 'Access-Token': tok} };
 	var out = document.getElementById("chatList");
 
@@ -65,24 +65,37 @@ const getChatList = () => {
 		});
 }
 
-const getDevices = () =>{
+const getChatCont = ()=>{
+	const url =  "https://api.pushbullet.com/v2/" + "pushes";
+	axios.defaults.headers.common['Access-Token'] = tok;
+	let extra = { 'active' : 'true'};
+	var out = document.getElementById("history");
+	
+	axios.get(url, extra ).then(response => {
+		var pushList = response.data.pushes;
+			for(var i = 0; i < pushList.length; i++){
+				out.innerHTML += pushList[i].body + "<br>";
+			}				
+		})
+		.catch(error =>{
+			console.error(error);
+		  });
+	}
+const getDevices = (naem) =>{
 	const url =  "https://api.pushbullet.com/v2/" + "devices";
 	let extra = { headers : { 'Access-Token': tok} };
 
 	axios.get(url, extra)
 		.then(response => {
 			var devList = response.data.devices;
-			devices = [];
+			var devices = [];
 			for(var i = 0; i < devList.length; i++){
 				if(devList[i].nickname !=null){
-					console.log(devList[i].nickname);
 					devices.push(devList[i].nickname);
 				}
 			}
-
-			for(i=0; i<devices.length; i++){
-				console.log(devices[i]);
-			}
+			devName = devices;
+			return devName;
 		})
 		.catch(error => {
 			console.error(error);
@@ -94,6 +107,7 @@ const pushMe =() =>{
 	axios.defaults.headers.common['Access-Token'] = tok;
 
 	var title = "Push";
+	
 	var body = document.getElementById("body").value;
 	console.log(title);
 	let extra = { 'type' : 'note','title' : title, 'body' : body};
@@ -105,6 +119,7 @@ const pushMe =() =>{
 		console.error(error);
 	  });
 }
+
 const pushFriends =() =>{
 	const url =  "https://api.pushbullet.com/v2/" + "pushes";
 	axios.defaults.headers.common['Access-Token'] = tok;
@@ -124,18 +139,19 @@ const getAllPushes =() =>{
 	//반드시반드시 바꿔요
 	axios.defaults.headers.common['Access-Token'] = tok;
 	let extra = { 'active' : 'true'};
-	var out = document.getElementById("devList");
-	
+	var out = document.getElementById("history");
+	var history ="";
 	axios.get(url, extra ).then(response => {
 		console.log("PUSH");
 		var pushList = response.data.pushes;
 			for(var i = 0; i < pushList.length; i++){
 					out.innerHTML += pushList[i].body + "<br>";
-			}	
+					history = history + " " +pushList[i].body;
+				}				
 		})
 		.catch(error =>{
 			console.error(error);
-	  	});
+		  });
 }
 
 let flag = true;
@@ -176,11 +192,12 @@ const AppBase = kind({
 						view['pushFriends'] = pushFriends;
 						view['getAllPushes'] = getAllPushes;
 						view['getDevices'] = getDevices;
-						view['getChat'] = getChatList;
+						view['getChatList'] = getChatList;
+						view['getChatCont']=getChatCont;
 
 						view['token'] = tok;
 						view['me'] = me;
-						view['devices'] = devices;
+						view['devName'] = devName;
 						
 						return (
 							<View {...view} key={i} />

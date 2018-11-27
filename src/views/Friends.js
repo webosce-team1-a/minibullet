@@ -17,8 +17,8 @@ const FriendsView = (props) => (
 				title="Friends"
 			/>
 			<input type ="text" id ="token"></input>
-			<Button onClick={props.login}>Load Chats</Button>
-			<p id="devList"></p>
+			<Button onClick={props.getChatCont("ina song")}>Load Chats</Button>
+			<p id="history"></p>
 		</Cell>
 	</Layout>
 );
