@@ -29,27 +29,29 @@ const views = [
 	{title:'setting', view:Setting},
 ]
 
-let tok = "o.jkutNveC2uQZtTfPNfG0GchnrM1xdVpx";
+let tok;
 let me;
 
-const login= ()=>{
-	const url =  "https://api.pushbullet.com/v2/users/me";
-	//tok = document.getElementById("token").value;
-	
-	let extra = { 'Access-Token' : tok };
+const checkTokenValidity = () => {
+	const url = "https://api.pushbullet.com/v2/" + "users/me";
+	var USER_TOKEN = document.getElementById("TOK").getElementsByTagName("input")[0].value;
+	let extra = { headers : { 'Access-Token': USER_TOKEN} };
 
-	axios.get(url, extra).then(response =>{
-		me = response.data.name;
-		console.log(me);
-	}).catch(error=>{
-		console.error(error);
-	});
-
+	axios.get(url, extra)
+		.then(response => {
+			console.log(response.data.name);
+			notifyLS2("Welcome " + response.data.name);
+			tok = USER_TOKEN;
+			flag = true;
+		})
+		.catch(error => {
+			console.log("FAIL" + " " + error);
+			notifyLS2("LOGIN FAILED");
+		});
 }
 
 const getChatList = () => {
 	const url = "https://api.pushbullet.com/v2/" + "chats";
-	console.log(tok);
 	let extra = { headers : { 'Access-Token': tok} };
 	var out = document.getElementById("chatList");
 
@@ -181,7 +183,7 @@ const AppBase = kind({
 				</Cell> ) : null}
 				<Cell component={ViewManager} index={index}>
 					{views.map((view, i) => {
-						view['login'] = login;
+						view['loginValid'] = checkTokenValidity;
 						view['pushMe'] = pushMe;
 						view['pushFriends'] = pushFriends;
 						view['getAllPushes'] = getAllPushes;
