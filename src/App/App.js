@@ -6,6 +6,7 @@ import Layout, {Cell} from '@enact/ui/Layout';
 import MoonstoneDecorator from '@enact/moonstone/MoonstoneDecorator';
 import PropTypes from 'prop-types';
 import React from 'react';
+
 import ScrollerComponent from '@enact/moonstone/Scroller';
 import ViewManager from '@enact/ui/ViewManager';
 
@@ -26,8 +27,9 @@ const views = [
 	{title:'friends', view: Friends},
 	{title:'setting', view:Setting},
 ]
+let loginflag = true;
+let firstflag = true;
 
-let flag = false;
 
 const AppBase = kind({
 	name: 'App',
@@ -50,19 +52,28 @@ const AppBase = kind({
 
 	render: ({handleChange, index, ...rest}) => {
 		delete rest.onChange;
-
+		
+		
 		return (
 			<Layout {...rest}>
-				{flag ? (<Cell component={ScrollerComponent} size="20%">
+			
+				{loginflag ? (<Cell component={ScrollerComponent} size="20%">
 					<Group childComponent={Item} itemProps={{className: css.navItem}} onSelect={handleChange} select={'radio'} selected={index}>
 						{views.map((view) => view.title)}
 					</Group>
 				</Cell> ) : null}
+			
+
+				
 				<Cell component={ViewManager} index={index}>
-					{views.map((view, i) => (
-						<View {...view} key={i} />
-					))}
-				</Cell>
+				{views.map((view, i) => {
+					firstflag = false;
+					return(<View {...view} key={i} />);
+				})} </Cell>
+				
+				
+
+
 			</Layout>
 		);
 	}
@@ -72,3 +83,60 @@ const App = MoonstoneDecorator(Changeable({prop: 'index', change: 'onChange'}, A
 
 
 export default MoonstoneDecorator(App);
+	{/*
+			<Layout {...rest}>
+				{flag ? (<Cell component={ScrollerComponent} size="20%">
+					<Group childComponent={Item} itemProps={{className: css.navItem}} onSelect={handleChange} select={'radio'} selected={index}>
+						{views.map((view) => view.title)}
+					</Group>
+				</Cell> ) : null}
+
+				<Cell component={ViewManager} index={index}>
+					{views.map((view, i) => (
+						<View {...view} key={i} />
+					))} </Cell>
+			</Layout>
+
+
+
+
+
+					delete rest.onChange;
+
+		return (
+			<Layout {...rest}>
+				<Cell component={ScrollerComponent} size="20%">
+					<Group childComponent={Item} itemProps={{className: css.navItem}} onSelect={handleChange} select={'radio'} selected={index}>
+						{views.map((view) => view.title)}
+					</Group>
+				</Cell>
+				<Cell component={ViewManager} index={index}>
+					{views.map((view, i) => {
+						view['testFunction'] = testFunction;
+						return (
+							<View {...view} key={i} />
+						);
+					})}
+				</Cell>
+			</Layout>
+		);
+	}
+
+
+
+					{firstflag ? 
+					(<Cell component={ViewManager} index={0}>
+					{views.map((view, i) => {
+						firstflag = false;
+						return(<View {...view} key={i} />);
+					})} </Cell>)
+					
+					: 
+					
+					(<Cell component={ViewManager} index={index}>
+					{views.map((view, i) => {
+						firstflag = false;
+						return(<View {...view} key={i} />);
+					})} </Cell>)
+
+					*/}
