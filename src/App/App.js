@@ -14,18 +14,20 @@ import Me from '../views/Me.js'
 import Friends from '../views/Friends.js'
 import Setting from '../views/Setting.js'
 import Home from './Home.js';
-
+import Login from './Login.js';
 
 import css from './App.less';
 import View from './View.js';
 
 const views = [
+	{title: 'login', view:Login},
 	{title: 'home', view: Home},
 	{title: 'me', view: Me},
 	{title:'friends', view: Friends},
 	{title:'setting', view:Setting},
 ]
 
+let flag = false;
 
 const AppBase = kind({
 	name: 'App',
@@ -51,11 +53,11 @@ const AppBase = kind({
 
 		return (
 			<Layout {...rest}>
-				<Cell component={ScrollerComponent} size="20%">
+				{flag ? (<Cell component={ScrollerComponent} size="20%">
 					<Group childComponent={Item} itemProps={{className: css.navItem}} onSelect={handleChange} select={'radio'} selected={index}>
 						{views.map((view) => view.title)}
 					</Group>
-				</Cell>
+				</Cell> ) : null}
 				<Cell component={ViewManager} index={index}>
 					{views.map((view, i) => (
 						<View {...view} key={i} />
