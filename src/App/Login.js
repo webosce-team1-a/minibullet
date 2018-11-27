@@ -49,17 +49,6 @@ const Login = () => (
 				<Button onClick={openBrowser}>Go to get Token</Button>
 			</div>
 
-			{/*
-			<div style={inputColumn}>
-				<Divider>Expandable Input</Divider>
-				<ExpandableInput title="No noneText" />
-				<ExpandableInput title="Disabled Input" noneText="I am disabled." disabled />
-				<ExpandableInput title="Input with noneText" noneText="Nothing inputted" />
-				<ExpandableInput title="Input with defaultValue" defaultValue="Initial value" />
-				<ExpandableInput title="Input with Placeholder" noneText="No input" placeholder="Placeholder" />
-				<ExpandableInput title="Input with Password" type="password" />
-			</div>
-			*/}
 		</Cell>
 	</Layout>
 );
