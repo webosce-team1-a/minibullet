@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ScrollerComponent from '@enact/moonstone/Scroller';
 import ViewManager from '@enact/ui/ViewManager';
+import axios from 'axios';
 
 //import MainPanel from '../views/MainPanel';
 import Me from '../views/Me.js'
@@ -27,7 +28,26 @@ const views = [
 	{title:'setting', view:Setting},
 ]
 
-let flag = false;
+let tok = "o.I7mba7PcOUawRGIHHYCW5QheducyLqDY";
+
+const getChatList = () => {
+	const url = "https://api.pushbullet.com/v2/" + "chats";
+	console.log(tok);
+	let extra = { headers : { 'Access-Token': tok} };
+	var out = document.getElementById("chatList");
+
+	axios.get(url, extra)
+		.then(response => {
+			var chatList = response.data.chats;
+			for(var i = 0; i < chatList.length; i++)
+                out.innerHTML += chatList[i].with.name + "<br>";
+		})
+		.catch(error => {
+			console.error(error);
+		});
+}
+
+let flag = true;
 
 const AppBase = kind({
 	name: 'App',
@@ -59,9 +79,13 @@ const AppBase = kind({
 					</Group>
 				</Cell> ) : null}
 				<Cell component={ViewManager} index={index}>
-					{views.map((view, i) => (
-						<View {...view} key={i} />
-					))}
+					{views.map((view, i) => {
+						view['getChat'] = getChatList;
+						view['token'] = tok;
+						return (
+							<View {...view} key={i} />
+						);
+					})}
 				</Cell>
 			</Layout>
 		);

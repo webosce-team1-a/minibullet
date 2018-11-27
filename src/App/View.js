@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 
-const View = ({isAriaHidden = false, isHeader = true, title, view: ComponentView}) => {
+const View = ({isAriaHidden = false, isHeader = true, title, view: ComponentView, ...rest}) => {
 	let header;
 
 	if (isHeader) {
@@ -13,7 +13,7 @@ const View = ({isAriaHidden = false, isHeader = true, title, view: ComponentView
 	return (
 		<Panel aria-owns="floatLayer" style={{padding: 0}}>
 			{header}
-			<ComponentView />
+			<ComponentView {...rest}/>
 		</Panel>
 	);
 };
