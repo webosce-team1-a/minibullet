@@ -8,20 +8,23 @@ import Button from '@enact/moonstone/Button/Button';
 import axios from 'axios';
 
 
-const friendlist = ["INA", "INO", "YEDDO"];
+var friendlist = [];
 const chatlist = [
     {
+        id: 0,
         title:"hihi",
         body: "hohoho"
     },
-      {
+    {
+        id: 1,
         title: "hoho",
         body: "who'll win?"
-      },
-      {
+    },
+    {
+        id: 2,
         title: "I have something to tell you",
         body: "get out!"
-      },
+    }
 ];
 class MessageList extends React.Component {
 	render() {
@@ -46,12 +49,23 @@ class MessageList extends React.Component {
 
 class FriendsView extends React.Component {
 
-    constructor() {
-		super()
+    constructor(props) {
+        super(props);
+        (props.getChat());
+        console.log(friendlist);
 		this.state = {
-		   messages: chatlist
-		}
-	  }
+           messages: chatlist,
+           friendlist: props.cList.slice()
+        }
+        
+        setInterval(() => {
+            this.props.getChat();
+            this.setState({
+                friendlist: this.props.cList.slice()
+            });
+        }, 3000);
+    }
+
     render(){
         return(
             <Layout orientation="vertical">
@@ -63,7 +77,7 @@ class FriendsView extends React.Component {
                         orientation="horizontal"
                         width="medium"
                     >
-                        {friendlist}
+                        {this.state.friendlist}
                     </Picker>
                     </div>
                 </Cell>

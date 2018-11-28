@@ -50,16 +50,17 @@ const checkTokenValidity = () => {
 		});
 }
 
+var chatList = [];
+
 const getChatList = () => {
 	const url = "https://api.pushbullet.com/v2/" + "chats";
 	let extra = { headers : { 'Access-Token': tok} };
-	var out = document.getElementById("chatList");
 
 	axios.get(url, extra)
 		.then(response => {
-			var chatList = response.data.chats;
-			for(var i = 0; i < chatList.length; i++)
-                out.innerHTML += chatList[i].with.name + "<br>";
+			var cList = response.data.chats;
+			for(var i = 0; i < cList.length; i++)
+                chatList[i] = cList[i].with.name;
 		})
 		.catch(error => {
 			console.error(error);
@@ -193,6 +194,7 @@ const AppBase = kind({
 						view['token'] = tok;
 						view['me'] = me;
 						
+						view['cList'] = chatList;
 						return (
 							<View {...view} key={i} />
 						);
