@@ -91,14 +91,14 @@ class MeView extends React.Component {
 
 		this.state = {
 				messages: props,
-				devicelist: props.dList.slice(),
+				devicelist: props.dList.key.slice(),
 				pushlist : props.pList.slice(),	
 		}
 
 		setInterval(() => {
 			this.props.getDevices();
 			this.setState({
-					devicelist: this.props.dList.slice(),
+					devicelist: this.props.dList.key.slice(),
 					pushlist : this.props.pList.slice(),
 					seletedDev : seleted,	
 			});
@@ -106,7 +106,7 @@ class MeView extends React.Component {
 	}
 
 	handleChange({value}){
-		console.log(this.devicelist[value].value('iden'));		
+		console.log(this.props.dList[value].value('iden'));		
 	}
 
 	render(){

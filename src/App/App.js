@@ -60,8 +60,7 @@ const getDevices = () =>{
 		  var tmp;
 		  for(var i = 0; i < dList.length; i++){
 			 if(dList[i].nickname !=null){
-				tmp = dList[i];
-				devList.push({iden: tmp.idem , nickname : tmp.nickname});
+				devList[dList[i].iden] = dList[i].nickname;
 			}
 		  }
 	   })
