@@ -8,7 +8,8 @@ import Button from '@enact/moonstone/Button/Button';
 import axios from 'axios';
 
 
-var friendlist = [];
+var friendlist = {};
+var curFriend;
 const chatlist = [
     {
         id: 0,
@@ -55,15 +56,20 @@ class FriendsView extends React.Component {
         console.log(friendlist);
 		this.state = {
            messages: chatlist,
-           friendlist: props.cList.slice()
+           friendlist: props.cList
         }
         
         setInterval(() => {
             this.props.getChat();
             this.setState({
-                friendlist: this.props.cList.slice()
+                friendlist: this.props.cList
             });
         }, 3000);
+    }
+
+    handleChange = ({value}) => {
+        curFriend = this.state.friendlist[Object.keys(this.state.friendlist)[value]];
+        console.log("Selected " + curFriend);
     }
 
     render(){
@@ -71,14 +77,18 @@ class FriendsView extends React.Component {
             <Layout orientation="vertical">
                 <Cell shrink components="label">
                     <div>
-                    {/* send message */}
-                    <Input placeholder="Enter your message" dismissOnEnter/>
                     <Picker
+                        onChange={this.handleChange}
                         orientation="horizontal"
                         width="medium"
                     >
-                        {this.state.friendlist}
+                        {Object.keys(this.state.friendlist)}
                     </Picker>
+                    <br/>
+                    {/* send message */}
+                    <Input placeholder="Enter your title" dismissOnEnter id="msgTitle"/>
+                    <Input placeholder="Enter your message" dismissOnEnter id="msgBody"/>
+                    <Button onClick={() => this.props.pushFriends(curFriend)}>SEND</Button>
                     </div>
                 </Cell>
 
