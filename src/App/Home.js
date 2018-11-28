@@ -4,7 +4,7 @@ import pushmon from './pushmon.png';
 const Home = () => (
 	<div>
 		<p>
-            <img src={pushmon} widith="300px" height="300px" />
+            <img src={pushmon} align="center" widith="300px" height="300px" />
             <br/>
             HI. I'm Pushmon!
             <br/>
