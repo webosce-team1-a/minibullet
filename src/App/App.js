@@ -46,6 +46,7 @@ const getChatList = () => {
 		  console.error(error);
 	   });
 }
+
 var devList = [];
 const getDevices = () =>{
 	const url =  "https://api.pushbullet.com/v2/" + "devices";
@@ -56,19 +57,27 @@ const getDevices = () =>{
 	   .then(response => {
 		  var dList = response.data.devices;
 		  for(var i = 0; i < dList.length; i++){
-			 if(dList[i].nickname !=null)
-				devList[i] = dList[i].nickname;
+			 if(dList[i].nickname !=null){
+				var key = dList[i].iden;
+				var val = dList[i].nickname;
+				devList[i].push({ key : val});
+			}
 		  }
 	   })
 	   .catch(error => {
 		  console.error(error);
 	   });
 }
+
 var pushList=[];
 const pushMe =() =>{
 	const url =  "https://api.pushbullet.com/v2/" + "pushes";
+	var title = document.getElementById("title").getElementsByTagName("input")[0].value;
+	//var body = document.getElementById("body").getElementsByTagName("input")[0].value;
+		
 	axios.defaults.headers.common['Access-Token'] = tok;
-	let extra = { 'type' : 'note','title' : 'HELLO',	'body' : 'HELLO WORLD' };
+
+	let extra = { 'type' : 'note','title' : title,	'body' : 'HELLO WORLD' };
 
 	axios.post(url,extra ).then(response => {
 		console.log("PUSH");
@@ -95,7 +104,6 @@ const getAllPushes =() =>{
 	axios.defaults.headers.common['Access-Token'] = tok;
 	let extra = { 'active' : 'true'};
  
-	//반드시반드시 바꿔요
 	axios.get(url, extra )
 		.then(response => {
 			console.log("PUSH");

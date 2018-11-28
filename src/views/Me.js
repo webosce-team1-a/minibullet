@@ -7,10 +7,14 @@ import React from 'react';
 import ToggleButton from '@enact/moonstone/ToggleButton';
 import VirtualList from '@enact/moonstone/VirtualList';
 import Scroller from '@enact/moonstone/Scroller';
+import { Button } from '@enact/moonstone/Button/Button';
 
 	/*items.push('Item ' + ('00' + i).slice(-3));*/
 
+var seleted;
+var pushlist = []
 var devicelist=[]
+
 const chatlist = [
 	/*
 	{
@@ -83,19 +87,28 @@ class MeView extends React.Component {
 	constructor(props) {
 		super(props);
 		(props.getDevices());
-		console.log(devicelist);
-			this.state = {
-				messages: chatlist,
-				devicelist: props.dList.slice()
+		(props.getAllPushes());
+
+		this.state = {
+				messages: props,
+				devicelist: props.dList.slice(),
+				pushlist : props.pList.slice(),	
 		}
 
 		setInterval(() => {
-				this.props.getDevices();
-				this.setState({
-						devicelist: this.props.dList.slice()
-				});
+			this.props.getDevices();
+			this.setState({
+					devicelist: this.props.dList.slice(),
+					pushlist : this.props.pList.slice(),
+					seletedDev : seleted,	
+			});
 		}, 3000);
 	}
+
+	handleChange({value}){
+		console.log(this.devicelist.values(devicelist.key(value)));		
+	}
+
 	render(){
 		return (
 			<Layout orientation="vertical">
@@ -103,12 +116,16 @@ class MeView extends React.Component {
 				<div>
 				{/* send message */}
 				<Input placeholder="Enter your message" dismissOnEnter/>
+				<Button onClick ={this.props.pushMe}>Send</Button>
+				
 				<Picker
+					onChange ={this.handleChange}
 					orientation="horizontal"
 					width="medium"
 				>
-				{this.state.devicelist}
+					{this.state.devicelist}
 				</Picker>
+				
 				</div>
 			</Cell>
 
@@ -120,9 +137,6 @@ class MeView extends React.Component {
 		);
 	}
 }
-
-
-
 
 
 export default MeView;
