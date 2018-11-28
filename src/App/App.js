@@ -52,15 +52,15 @@ const getDevices = () =>{
 	const url =  "https://api.pushbullet.com/v2/" + "devices";
 	let extra = { headers : { 'Access-Token': tok} };
 	var out = document.getElementById("devList");
- 
+
 	axios.get(url, extra)
 	   .then(response => {
 		  var dList = response.data.devices;
+		  var tmp;
 		  for(var i = 0; i < dList.length; i++){
 			 if(dList[i].nickname !=null){
-				var key = dList[i].iden;
-				var val = dList[i].nickname;
-				devList[i].push({ key : val});
+				tmp = dList[i];
+				devList.push({iden: tmp.idem , nickname : tmp.nickname});
 			}
 		  }
 	   })
@@ -107,12 +107,13 @@ const getAllPushes =() =>{
 	axios.get(url, extra )
 		.then(response => {
 			console.log("PUSH");
+			var tmp;
 			var pList = response.data.pushes;
 			for(var i = 0; i < pList.length; i++){
-			   pushList[i] = pList[i].body;
+					tmp = pList[i];
+					pushList[i]={ "body":  tmp.body, "semail": tmp.sender_email, "remail":tmp.receiver_email, "tiden": tmp.target_device_iden, "siden" :tmp.source_device_iden };
 			}   
-		})
-		.catch(error => {
+		}).catch(error => {
 			console.error(error);
 		});
 }

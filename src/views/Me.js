@@ -106,7 +106,7 @@ class MeView extends React.Component {
 	}
 
 	handleChange({value}){
-		console.log(this.devicelist.values(devicelist.key(value)));		
+		console.log(this.devicelist[value].value('iden'));		
 	}
 
 	render(){
