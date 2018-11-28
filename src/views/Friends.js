@@ -10,23 +10,7 @@ import axios from 'axios';
 
 var friendlist = {};
 var curFriend;
-const chatlist = [
-    {
-        id: 0,
-        title:"hihi",
-        body: "hohoho"
-    },
-    {
-        id: 1,
-        title: "hoho",
-        body: "who'll win?"
-    },
-    {
-        id: 2,
-        title: "I have something to tell you",
-        body: "get out!"
-    }
-];
+
 class MessageList extends React.Component {
 	render() {
 	  return (
@@ -55,20 +39,49 @@ class FriendsView extends React.Component {
         (props.getChat());
         console.log(friendlist);
 		this.state = {
-           messages: chatlist,
+           messages: [],
            friendlist: props.cList
         }
-        
         setInterval(() => {
             this.props.getChat();
             this.setState({
                 friendlist: this.props.cList
             });
         }, 3000);
+
+        setInterval(() => {
+            this.props.getAllPushes();
+            this.setState({
+                chatlist: this.props.pList
+            });
+        }, 3000);
+
+        setTimeout(() => {
+            this.handleChange({value: 0});
+        }, 4000);
     }
 
     handleChange = ({value}) => {
+        const tempArray = [];
+        this.setState({
+            messages: tempArray
+        });
         curFriend = this.state.friendlist[Object.keys(this.state.friendlist)[value]];
+        console.log("###");
+        console.log(this.state.messages);
+        for(var i = this.props.pList.length - 1; i >= 0; i--) {
+            if(this.state.chatlist !== 'undefined' && ( this.props.pList[i].semail === curFriend || this.props.pList[i].remail === curFriend)) {
+                console.log(curFriend, this.props.pList[i].semail, this.props.pList[i].remail, this.props.pList[i].title);
+                this.setState({
+                    messages: [...this.state.messages, {
+                        id: i,
+                        title: this.props.pList[i].title,
+                        body: this.props.pList[i].body
+                    }]
+                });
+            }
+        }
+        console.log(this.props.pList);
         console.log("Selected " + curFriend);
     }
 
