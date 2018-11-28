@@ -31,63 +31,40 @@ const views = [
 
 let tok;
 let me;
-
-<<<<<<< HEAD
-const checkTokenValidity = () => {
-	const url = "https://api.pushbullet.com/v2/" + "users/me";
-	var USER_TOKEN = document.getElementById("TOK").getElementsByTagName("input")[0].value;
-	let extra = { headers : { 'Access-Token': USER_TOKEN} };
-
-	axios.get(url, extra)
-		.then(response => {
-			console.log(response.data.name);
-			notifyLS2("Welcome " + response.data.name);
-			tok = USER_TOKEN;
-			flag = true;
-		})
-		.catch(error => {
-			console.log("FAIL" + " " + error);
-			notifyLS2("LOGIN FAILED");
-		});
-}
-
-var chatList = [];
-
-=======
->>>>>>> yeddo3
+var chatList=[];
 const getChatList = () => {
 	const url = "https://api.pushbullet.com/v2/" + "chats";
 	let extra = { headers : { 'Access-Token': tok} };
-
+ 
 	axios.get(url, extra)
-		.then(response => {
-			var cList = response.data.chats;
-			for(var i = 0; i < cList.length; i++)
-                chatList[i] = cList[i].with.name;
-		})
-		.catch(error => {
-			console.error(error);
-		});
+	   .then(response => {
+		  var cList = response.data.chats;
+		  for(var i = 0; i < cList.length; i++)
+				 chatList[i] = cList[i].with.name;
+	   })
+	   .catch(error => {
+		  console.error(error);
+	   });
 }
-
+var devList = [];
 const getDevices = () =>{
 	const url =  "https://api.pushbullet.com/v2/" + "devices";
 	let extra = { headers : { 'Access-Token': tok} };
 	var out = document.getElementById("devList");
-
+ 
 	axios.get(url, extra)
-		.then(response => {
-			var devList = response.data.devices;
-			for(var i = 0; i < devList.length; i++){
-				if(devList[i].nickname !=null)
-					out.innerHTML += devList[i].nickname + "<br>";
-			}
-		})
-		.catch(error => {
-			console.error(error);
-		});
+	   .then(response => {
+		  var dList = response.data.devices;
+		  for(var i = 0; i < dList.length; i++){
+			 if(dList[i].nickname !=null)
+				devList[i] = dList[i].nickname;
+		  }
+	   })
+	   .catch(error => {
+		  console.error(error);
+	   });
 }
-
+var pushList=[];
 const pushMe =() =>{
 	const url =  "https://api.pushbullet.com/v2/" + "pushes";
 	axios.defaults.headers.common['Access-Token'] = tok;
@@ -115,16 +92,17 @@ const pushFriends =() =>{
 
 const getAllPushes =() =>{
 	const url =  "https://api.pushbullet.com/v2/" + "pushes";
-
-	//반드시반드시 바꿔요
 	axios.defaults.headers.common['Access-Token'] = tok;
 	let extra = { 'active' : 'true'};
-	var out = document.getElementById("devList");
-	
+ 
+	//반드시반드시 바꿔요
 	axios.get(url, extra )
 		.then(response => {
 			console.log("PUSH");
-			var pushList = response.data.pushes;
+			var pList = response.data.pushes;
+			for(var i = 0; i < pList.length; i++){
+			   pushList[i] = pList[i].body;
+			}   
 		})
 		.catch(error => {
 			console.error(error);
@@ -208,7 +186,6 @@ class AppBase extends React.Component {
 						view['token'] = tok;
 						view['me'] = me;
 						
-						view['cList'] = chatList;
 						return (
 							<View {...view} key={i} />
 						);
