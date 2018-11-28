@@ -120,7 +120,7 @@ const getAllPushes =() =>{
 			var pList = response.data.pushes;
 			for(var i = 0; i < pList.length; i++){
 					tmp = pList[i];
-					pushList[i]={ "body":  tmp.body, "semail": tmp.sender_email, "remail":tmp.receiver_email, "tiden": tmp.target_device_iden, "siden" :tmp.source_device_iden };
+					pushList[i]={ "title": tmp.title, "body":  tmp.body, "semail": tmp.sender_email, "remail":tmp.receiver_email, "tiden": tmp.target_device_iden, "siden" :tmp.source_device_iden };
 			}   
 		}).catch(error => {
 			console.error(error);
@@ -206,7 +206,7 @@ class AppBase extends React.Component {
 						
 						view['cList'] = chatList;
 						view['dList'] = devList;
-						view['pLsit'] = pushList;
+						view['pList'] = pushList;
 						return (
 							<View {...view} key={i} />
 						);
