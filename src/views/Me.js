@@ -12,40 +12,15 @@ import Scroller from '@enact/moonstone/Scroller';
 
 var devicelist=[]
 const chatlist = [
+	/*
 	{
 	  senderId: "perborgen",
 	  text: "who'll win?"
 	},
-	{
-	  senderId: "janedoe",
-	  text: "who'll lost?"
-	},
-	{
-	senderId: "janedoe",
-	text: "who'll lost?"
-	},
-	{
-	senderId: "janedoe",
-	text: "who'll lost?"
-	},
-	{
-	senderId: "janedoe",
-	text: "who'll lost?"
-	},
-	{
-		senderId: "janedoe",
-		text: "who'll lost?"
-	},
-	{
-		senderId: "janedoe",
-		text: "who'll lost?"
-	},
-	{
-		senderId: "janedoe",
-		text: "who'll lost?"
-	},
+	*/
   ]
-{/*
+
+	{/*
 class SendMessageForm extends React.Component {
 	constructor() {
 	  super()
@@ -105,24 +80,22 @@ class MessageList extends React.Component {
 
 
 class MeView extends React.Component {
-	
 	constructor(props) {
 		super(props);
 		(props.getDevices());
 		console.log(devicelist);
-		this.state = {
-			 messages: chatlist,
-			 devicelist: props.dList.slice()
+			this.state = {
+				messages: chatlist,
+				devicelist: props.dList.slice()
 		}
-		
+
 		setInterval(() => {
 				this.props.getDevices();
 				this.setState({
 						devicelist: this.props.dList.slice()
 				});
 		}, 3000);
-}
-
+	}
 	render(){
 		return (
 			<Layout orientation="vertical">
@@ -134,7 +107,7 @@ class MeView extends React.Component {
 					orientation="horizontal"
 					width="medium"
 				>
-					{this.props.dList}
+				{this.state.devicelist}
 				</Picker>
 				</div>
 			</Cell>
