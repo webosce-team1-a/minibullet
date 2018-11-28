@@ -48,7 +48,7 @@ const Login = (props) => (
 				<Button onClick={() => props.loginValid()}>Login</Button>
 				<br/><br/><br/><br/>
 				<Divider>If you don't have token..</Divider>
-				<Button onClick={() => openBrowser()}>Go to get Token</Button>
+				<Button onClick={() => openBrowser()} >Go to get Token</Button>
 			</div>
 
 		</Cell>

@@ -22,16 +22,17 @@ import css from './App.less';
 import View from './View.js';
 
 const views = [
-	{title: 'login', view:Login},
 	{title: 'home', view: Home},
 	{title: 'me', view: Me},
 	{title:'friends', view: Friends},
 	{title:'setting', view:Setting},
+	{title: 'login', view:Login},
 ]
 
 let tok;
 let me;
 
+<<<<<<< HEAD
 const checkTokenValidity = () => {
 	const url = "https://api.pushbullet.com/v2/" + "users/me";
 	var USER_TOKEN = document.getElementById("TOK").getElementsByTagName("input")[0].value;
@@ -52,6 +53,8 @@ const checkTokenValidity = () => {
 
 var chatList = [];
 
+=======
+>>>>>>> yeddo3
 const getChatList = () => {
 	const url = "https://api.pushbullet.com/v2/" + "chats";
 	let extra = { headers : { 'Access-Token': tok} };
@@ -122,9 +125,6 @@ const getAllPushes =() =>{
 		.then(response => {
 			console.log("PUSH");
 			var pushList = response.data.pushes;
-			for(var i = 0; i < pushList.length; i++){
-				out.innerHTML += pushList[i].body + "<br>";
-			}	
 		})
 		.catch(error => {
 			console.error(error);
@@ -150,41 +150,55 @@ const notifyLS2 = (msg) => {
 		}
 	});
 }
+class AppBase extends React.Component {
+	constructor (props) {
+		super(props);
+		this.state = {
+			index: 0,
+			flag: false
+		};
+	}
 
-let flag = true;
+	handleChange = ({selected}) => {
+		this.setState({
+			index: selected
+		});
+	}
 
-const AppBase = kind({
-	name: 'App',
+	checkTokenValidity = () => {
+		const url = "https://api.pushbullet.com/v2/" + "users/me";
+		var USER_TOKEN = document.getElementById("TOK").getElementsByTagName("input")[0].value;
+		let extra = { headers : { 'Access-Token': USER_TOKEN} };
+	
+		axios.get(url, extra)
+			.then(response => {
+				console.log(response.data.name);
+				notifyLS2("Welcome " + response.data.name);
+				tok = USER_TOKEN;
+				this.setState({
+					flag: true
+				});
+			})
+			.catch(error => {
+				console.log("FAIL" + " " + error);
+				notifyLS2("LOGIN FAILED");
+			});
+	}
 
-	propTypes: {
-		index: PropTypes.number,
-		onChange: PropTypes.func
-	},
-
-	styles: {
-		css,
-		className: 'app'
-	},
-
-	computed: {
-		handleChange: ({onChange}) => ({selected}) => {
-			onChange({index: selected});
-		}
-	},
-
-	render: ({handleChange, index, ...rest}) => {
-		delete rest.onChange;
+	render () {
+		console.log(this.state.flag);
 
 		return (
-			<Layout {...rest}>
-				{flag ? (<Cell component={ScrollerComponent} size="20%">
-					<Group childComponent={Item} itemProps={{className: css.navItem}} onSelect={handleChange} select={'radio'} selected={index}>
+			<Layout {...this.props}>
+				{this.state.flag ? (<Cell component={ScrollerComponent} size="20%">
+					<Group childComponent={Item} itemProps={{className: css.navItem}} onSelect={this.handleChange} selected={this.state.index}>
 						{views.map((view) => view.title)}
 					</Group>
 				</Cell> ) : null}
-				<Cell component={ViewManager} index={index}>
+
+				<Cell component={ViewManager} index={this.state.flag ? this.state.index : 4}>
 					{views.map((view, i) => {
-						view['loginValid'] = checkTokenValidity;
+						view['loginValid'] = this.checkTokenValidity;
 						view['pushMe'] = pushMe;
 						view['pushFriends'] = pushFriends;
 						view['getAllPushes'] = getAllPushes;
@@ -203,9 +217,9 @@ const AppBase = kind({
 			</Layout>
 		);
 	}
-});
+}
 
-const App = MoonstoneDecorator(Changeable({prop: 'index', change: 'onChange'}, AppBase));
+const App = MoonstoneDecorator(AppBase);
 
 
 export default MoonstoneDecorator(App);
