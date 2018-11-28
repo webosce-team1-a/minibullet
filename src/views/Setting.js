@@ -9,12 +9,13 @@ const StatefulToggleButton = Toggleable({toggle: 'onClick', prop: 'selected'}, T
 
 
 const SettingView = () => (
-
-	<Layout orientation="vertical">
-		<Cell component={Scroller} focusableScrollbar>
-            <StatefulToggleButton toggleOffLabel="logout" toggleOnLabel="login" />
-		</Cell>
-	</Layout>
+ 
+        <Layout orientation="vertical" align="center">
+            <Cell component={Scroller} focusableScrollbar>
+                <StatefulToggleButton toggleOffLabel="logout" toggleOnLabel="login" />
+            </Cell>
+        </Layout>
+  
 );
 
 export default SettingView;
