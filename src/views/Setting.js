@@ -14,7 +14,9 @@ const SettingView = () => (
         <Cell shirink align="center">
             <StatefulToggleButton toggleOffLabel="logout" toggleOnLabel="login" />
         </Cell>
-        <Cell shirink align="right">
+        <Cell shirink align="center">
+        </Cell>
+        <Cell shirink align="center">
             <img src={beanbird} width="300px" height="300px"></img>
         </Cell>
 
