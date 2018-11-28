@@ -186,6 +186,9 @@ class AppBase extends React.Component {
 						view['token'] = tok;
 						view['me'] = me;
 						
+						view['cList'] = chatList;
+						view['dList'] = devList;
+						view['pLsit'] = pushList;
 						return (
 							<View {...view} key={i} />
 						);
