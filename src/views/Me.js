@@ -10,8 +10,7 @@ import Scroller from '@enact/moonstone/Scroller';
 
 	/*items.push('Item ' + ('00' + i).slice(-3));*/
 
-const devices = ["android", "chrome"];
-
+var devicelist=[]
 const chatlist = [
 	{
 	  senderId: "perborgen",
@@ -106,13 +105,23 @@ class MessageList extends React.Component {
 
 
 class MeView extends React.Component {
-	constructor() {
-		super()
+	
+	constructor(props) {
+		super(props);
+		(props.getDevices());
+		console.log(devicelist);
 		this.state = {
-		   messages: chatlist
+			 messages: chatlist,
+			 devicelist: props.dList.slice()
 		}
-	  }
-
+		
+		setInterval(() => {
+				this.props.getDevices();
+				this.setState({
+						devicelist: this.props.dList.slice()
+				});
+		}, 3000);
+}
 
 	render(){
 		return (
@@ -125,7 +134,7 @@ class MeView extends React.Component {
 					orientation="horizontal"
 					width="medium"
 				>
-					{devices}
+					{this.props.dList}
 				</Picker>
 				</div>
 			</Cell>
