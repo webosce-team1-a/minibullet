@@ -31,20 +31,21 @@ const views = [
 
 let tok;
 let me;
-var chatList=[];
+var chatList={};
 const getChatList = () => {
 	const url = "https://api.pushbullet.com/v2/" + "chats";
 	let extra = { headers : { 'Access-Token': tok} };
  
 	axios.get(url, extra)
 	   .then(response => {
-		  var cList = response.data.chats;
-		  for(var i = 0; i < cList.length; i++)
-				 chatList[i] = cList[i].with.name;
-	   })
-	   .catch(error => {
-		  console.error(error);
-	   });
+			var cList = response.data.chats;
+			for(var i = 0; i < cList.length; i++) {
+				chatList[cList[i].with.name] = cList[i].with.email;
+		  	}
+	   	})
+	   	.catch(error => {
+		  	console.error(error);
+	   	});
 }
 
 var devList = [];
@@ -86,17 +87,25 @@ const pushMe =() =>{
 		console.error(error);
 	  });
 }
-const pushFriends =() =>{
+const pushFriends = (email) =>{
 	const url =  "https://api.pushbullet.com/v2/" + "pushes";
+	var title = document.getElementById("msgTitle").getElementsByTagName("input")[0].value;
+	var body = document.getElementById("msgBody").getElementsByTagName("input")[0].value;
 	axios.defaults.headers.common['Access-Token'] = tok;
-	let extra = { 'type' : 'link','email':'goodboyih96@gmail.com','title' : 'HELLO','body' : 'HELLO WORLD' };
+	let extra = {
+		'type': 'note',
+		'email': email,
+		'title' : title,
+		'body' : body
+	};
 
-	axios.post(url,extra ).then(response => {
-		console.log("PUSH");
-	})
-	  .catch(error =>{
-		console.error(error);
-	  });
+	axios.post(url, extra)
+		.then(response => {
+			console.log("PUSH");
+		})
+		.catch(error =>{
+			console.error(error);
+	  	});
 }
 
 const getAllPushes =() =>{
